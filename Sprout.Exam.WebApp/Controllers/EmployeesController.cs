@@ -33,22 +33,29 @@ namespace Sprout.Exam.WebApp.Controllers
         {
             return await _context.Employees.ToListAsync();
         }
-        //public async Task<IActionResult> Get()
-        //{
-        //    var result = await Task.FromResult(StaticEmployees.ResultList);
-        //    return Ok(result);
-        //}
+
 
         /// <summary>
         /// Refactor this method to go through proper layers and fetch from the DB.
         /// </summary>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<Employee>> GetById(int id)
         {
-            var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
-            return Ok(result);
+            var employee = await _context.Employees.FindAsync(id);
+
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            return employee;
         }
+        //public async Task<IActionResult> GetById(int id)
+        //{
+        //    var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Refactor this method to go through proper layers and update changes to the DB.
