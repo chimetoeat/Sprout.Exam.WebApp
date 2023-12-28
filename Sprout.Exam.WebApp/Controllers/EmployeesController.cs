@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Sprout.Exam.Business.DataTransferObjects;
 using Sprout.Exam.Common.Enums;
+using Sprout.Exam.WebApp.Data;
 
 namespace Sprout.Exam.WebApp.Controllers
 {
@@ -15,6 +16,11 @@ namespace Sprout.Exam.WebApp.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
+        private readonly MyDbContext _context;
+        public EmployeesController(MyDbContext context)
+        {
+            _context = context;
+        }
 
         /// <summary>
         /// Refactor this method to go through proper layers and fetch from the DB.
