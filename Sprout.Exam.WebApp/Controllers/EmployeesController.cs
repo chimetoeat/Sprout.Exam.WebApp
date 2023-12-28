@@ -51,27 +51,54 @@ namespace Sprout.Exam.WebApp.Controllers
 
             return employee;
         }
-        //public async Task<IActionResult> GetById(int id)
-        //{
-        //    var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
-        //    return Ok(result);
-        //}
 
         /// <summary>
         /// Refactor this method to go through proper layers and update changes to the DB.
         /// </summary>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(EditEmployeeDto input)
+        public async Task<IActionResult> Put(int id, Employee employee)
         {
-            var item = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == input.Id));
-            if (item == null) return NotFound();
-            item.FullName = input.FullName;
-            item.Tin = input.Tin;
-            item.Birthdate = input.Birthdate.ToString("yyyy-MM-dd");
-            item.TypeId = input.TypeId;
-            return Ok(item);
+            if (id != employee.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(employee).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                if (!EmployeeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
         }
+
+        private bool EmployeeExists(int id)
+        {
+            return _context.Employees.Any(e => e.Id == id);
+        }
+
+        //public async Task<IActionResult> Put(EditEmployeeDto input)
+        //{
+        //    var item = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == input.Id));
+        //    if (item == null) return NotFound();
+        //    item.FullName = input.FullName;
+        //    item.Tin = input.Tin;
+        //    item.Birthdate = input.Birthdate.ToString("yyyy-MM-dd");
+        //    item.TypeId = input.TypeId;
+        //    return Ok(item);
+        //}
 
         /// <summary>
         /// Refactor this method to go through proper layers and insert employees to the DB.

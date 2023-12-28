@@ -16,7 +16,7 @@ namespace Sprout.Exam.WebApp.Models
         [Required]
         public string FullName { get; set; }
         [Required]
-        public string TIN { get; set; }
-        public int EmployeeTypeId { get; set; }
+        public string Tin { get; set; }
+        public int TypeId { get; set; }
     }
 }
