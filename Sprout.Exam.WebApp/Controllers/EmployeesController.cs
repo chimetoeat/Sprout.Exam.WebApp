@@ -92,38 +92,34 @@ namespace Sprout.Exam.WebApp.Controllers
             return _context.Employees.Any(e => e.Id == id);
         }
 
-        //public async Task<IActionResult> Put(EditEmployeeDto input)
-        //{
-        //    var item = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == input.Id));
-        //    if (item == null) return NotFound();
-        //    item.FullName = input.FullName;
-        //    item.Tin = input.Tin;
-        //    item.Birthdate = input.Birthdate.ToString("yyyy-MM-dd");
-        //    item.TypeId = input.TypeId;
-        //    return Ok(item);
-        //}
-
         /// <summary>
         /// Refactor this method to go through proper layers and insert employees to the DB.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Post(CreateEmployeeDto input)
+        public async Task<ActionResult<Employee>> Post(Employee employee)
         {
+            _context.Employees.Add(employee);
+            await _context.SaveChangesAsync();
 
-           var id = await Task.FromResult(StaticEmployees.ResultList.Max(m => m.Id) + 1);
-
-            StaticEmployees.ResultList.Add(new EmployeeDto
-            {
-                Birthdate = input.Birthdate.ToString("yyyy-MM-dd"),
-                FullName = input.FullName,
-                Id = id,
-                Tin = input.Tin,
-                TypeId = input.TypeId
-            });
-
-            return Created($"/api/employees/{id}", id);
+            return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         }
+        //public async Task<IActionResult> Post(CreateEmployeeDto input)
+        //{
+
+        //   var id = await Task.FromResult(StaticEmployees.ResultList.Max(m => m.Id) + 1);
+
+        //    StaticEmployees.ResultList.Add(new EmployeeDto
+        //    {
+        //        Birthdate = input.Birthdate.ToString("yyyy-MM-dd"),
+        //        FullName = input.FullName,
+        //        Id = id,
+        //        Tin = input.Tin,
+        //        TypeId = input.TypeId
+        //    });
+
+        //    return Created($"/api/employees/{id}", id);
+        //}
 
 
         /// <summary>
