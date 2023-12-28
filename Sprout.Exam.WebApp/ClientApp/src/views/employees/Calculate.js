@@ -36,7 +36,7 @@ export class EmployeeCalculate extends Component {
 
 <div className='form-row'>
 <div className='form-group col-md-12'>
-  <label >Birthdate: <b>{this.state.birthdate}</b></label>
+  <label >Birthdate: <b>{this.state.birthdate.substring(0, 10)}</b></label>
 </div>
 </div>
 

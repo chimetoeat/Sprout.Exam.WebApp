@@ -71,7 +71,7 @@ namespace Sprout.Exam.WebApp.Controllers
             try
             {
                 await _context.SaveChangesAsync();
-                return Ok(new { Message = "Changes saved successfully." });
+                return Ok(new { Message = "Employee updated successfully." });
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -104,22 +104,6 @@ namespace Sprout.Exam.WebApp.Controllers
 
             return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         }
-        //public async Task<IActionResult> Post(CreateEmployeeDto input)
-        //{
-
-        //   var id = await Task.FromResult(StaticEmployees.ResultList.Max(m => m.Id) + 1);
-
-        //    StaticEmployees.ResultList.Add(new EmployeeDto
-        //    {
-        //        Birthdate = input.Birthdate.ToString("yyyy-MM-dd"),
-        //        FullName = input.FullName,
-        //        Id = id,
-        //        Tin = input.Tin,
-        //        TypeId = input.TypeId
-        //    });
-
-        //    return Created($"/api/employees/{id}", id);
-        //}
 
 
         /// <summary>
@@ -129,10 +113,16 @@ namespace Sprout.Exam.WebApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
-            if (result == null) return NotFound();
-            StaticEmployees.ResultList.RemoveAll(m => m.Id == id);
-            return Ok(id);
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
+            {
+                return NotFound();
+            }
+
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Employee deleted successfully." });
         }
 
 
@@ -145,24 +135,50 @@ namespace Sprout.Exam.WebApp.Controllers
         /// <param name="workedDays"></param>
         /// <returns></returns>
         [HttpPost("{id}/calculate")]
-        public async Task<IActionResult> Calculate(int id,decimal absentDays,decimal workedDays)
-        {
-            var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
 
-            if (result == null) return NotFound();
-            var type = (EmployeeType) result.TypeId;
-            return type switch
+        public async Task<IActionResult> Calculate(int id, [FromBody] CalculateRequest request)
+        {
+            double absentDays = request.AbsentDays;
+            double workedDays = request.WorkedDays;
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
-                EmployeeType.Regular =>
-                    //create computation for regular.
-                    Ok(25000),
-                EmployeeType.Contractual =>
-                    //create computation for contractual.
-                    Ok(20000),
-                _ => NotFound("Employee Type not found")
-            };
+                return NotFound();
+            }
+            var type = employee.TypeId;
+
+            double basicSalary = 20000;
+            double dayRate = 500;
+            double netIncome;
+            if (type == 1)
+            {
+                netIncome = (basicSalary - (basicSalary / (absentDays * 22))) - (basicSalary * 0.12);
+                return Ok(netIncome.ToString("F2"));
+            } else
+            {
+                netIncome = dayRate * workedDays;
+                return Ok(netIncome.ToString("F2"));
+            }
 
         }
+            //public async Task<IActionResult> Calculate(int id,decimal absentDays,decimal workedDays)
+            //{
+            //    var result = await Task.FromResult(StaticEmployees.ResultList.FirstOrDefault(m => m.Id == id));
 
-    }
+            //    if (result == null) return NotFound();
+            //    var type = (EmployeeType) result.TypeId;
+            //    return type switch
+            //    {
+            //        EmployeeType.Regular =>
+            //            //create computation for regular.
+            //            Ok(25000),
+            //        EmployeeType.Contractual =>
+            //            //create computation for contractual.
+            //            Ok(20000),
+            //        _ => NotFound("Employee Type not found")
+            //    };
+
+            //}
+
+        }
 }
