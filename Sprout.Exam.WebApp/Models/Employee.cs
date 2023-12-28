@@ -14,7 +14,7 @@ namespace Sprout.Exam.WebApp.Models
         [Column(TypeName = "date")]
         public DateTime Birthdate { get; set; }
         [Required]
-        public string Fullname { get; set; }
+        public string FullName { get; set; }
         [Required]
         public string TIN { get; set; }
         public int EmployeeTypeId { get; set; }

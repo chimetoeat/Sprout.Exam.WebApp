@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Sprout.Exam.Business.DataTransferObjects;
 using Sprout.Exam.Common.Enums;
 using Sprout.Exam.WebApp.Data;
+using Sprout.Exam.WebApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Sprout.Exam.WebApp.Controllers
 {
@@ -27,11 +29,15 @@ namespace Sprout.Exam.WebApp.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<Employee>>> Get()
         {
-            var result = await Task.FromResult(StaticEmployees.ResultList);
-            return Ok(result);
+            return await _context.Employees.ToListAsync();
         }
+        //public async Task<IActionResult> Get()
+        //{
+        //    var result = await Task.FromResult(StaticEmployees.ResultList);
+        //    return Ok(result);
+        //}
 
         /// <summary>
         /// Refactor this method to go through proper layers and fetch from the DB.
