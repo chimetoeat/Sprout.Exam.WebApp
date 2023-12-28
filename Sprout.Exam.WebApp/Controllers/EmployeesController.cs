@@ -52,6 +52,8 @@ namespace Sprout.Exam.WebApp.Controllers
             return employee;
         }
 
+
+
         /// <summary>
         /// Refactor this method to go through proper layers and update changes to the DB.
         /// </summary>
@@ -69,8 +71,9 @@ namespace Sprout.Exam.WebApp.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(new { Message = "Changes saved successfully." });
             }
-            catch(DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException)
             {
                 if (!EmployeeExists(id))
                 {
