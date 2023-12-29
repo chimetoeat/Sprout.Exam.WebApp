@@ -42,7 +42,7 @@ export class EmployeeEdit extends Component {
 <div className="form-row">
 <div className='form-group col-md-6'>
   <label htmlFor='inputTin4'>TIN: *</label>
-  <input type='text' className='form-control' id='inputTin4' onChange={this.handleChange.bind(this)} value={this.state.tin} name="tin" placeholder='TIN' />
+  <input maxLength={12} type='text' className='form-control' id='inputTin4' onChange={this.handleChange.bind(this)} value={this.state.tin} name="tin" placeholder='TIN' />
 </div>
 <div className='form-group col-md-6'>
   <label htmlFor='inputEmployeeType4'>Employee Type: *</label>
@@ -52,7 +52,7 @@ export class EmployeeEdit extends Component {
   </select>
 </div>
 </div>
-<button type="submit" onClick={this.handleSubmit.bind(this)} disabled={this.state.loadingSave} className="btn btn-primary mr-2">{this.state.loadingSave?"Loading...": "Save"}</button>
+<button type="submit" onClick={this.handleSubmit.bind(this)} disabled={this.state.loadingSave || this.state.fullName === "" || this.state.birthdate === "" || this.state.tin === ""} className="btn btn-primary mr-2">{this.state.loadingSave?"Loading...": "Save"}</button>
 <button type="button" onClick={() => this.props.history.push("/employees/index")} className="btn btn-primary">Back</button>
 </form>
 </div>;
