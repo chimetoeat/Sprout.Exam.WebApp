@@ -72,7 +72,7 @@ Before you begin, ensure you have the following installed:
 	  Type and enter "update-database -Context MyDbContext" without the quotations
 	  You can verify in your SQL Server that Employees table exists in SproutExamDb database
 
-10. Run the project.
+10. Run the project (run mine using IIS Express).
 
 11. Login using the username: sprout.test@gmail.com and password: P@$$word6
 
