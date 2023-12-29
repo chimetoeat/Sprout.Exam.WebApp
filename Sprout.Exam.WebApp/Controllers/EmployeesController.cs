@@ -152,11 +152,25 @@ namespace Sprout.Exam.WebApp.Controllers
             double netIncome;
             if (type == 1)
             {
-                netIncome = (basicSalary - (basicSalary / (absentDays * 22))) - (basicSalary * 0.12);
+                if (absentDays > 0)
+                {
+                    netIncome = (basicSalary - (basicSalary / (absentDays * 22))) - (basicSalary * 0.12);
+                } else
+                {
+                    netIncome = (basicSalary - (basicSalary * 0.12));
+                }
+                
                 return Ok(netIncome.ToString("F2"));
             } else
             {
-                netIncome = dayRate * workedDays;
+                if (workedDays > 0)
+                {
+                    netIncome = dayRate * workedDays;
+                } else
+                {
+                    netIncome = 0;
+                }
+                
                 return Ok(netIncome.ToString("F2"));
             }
 
