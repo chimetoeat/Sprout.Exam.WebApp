@@ -65,18 +65,18 @@ export class EmployeeCalculate extends Component {
 { this.state.typeId === 1? 
 <div className='form-group col-md-6'>
   <label htmlFor='inputAbsentDays4'>Absent Days: </label>
-  <input type='text' className='form-control' id='inputAbsentDays4' onChange={this.handleChange.bind(this)} value={this.state.absentDays} name="absentDays" placeholder='Absent Days' />
+  <input type='number' className='form-control' id='inputAbsentDays4' onChange={this.handleChange.bind(this)} value={this.state.absentDays > 30 || this.state.absentDays < 0 ? 0 : this.state.absentDays} name="absentDays" placeholder='Absent Days' />
 </div> :
 <div className='form-group col-md-6'>
   <label htmlFor='inputWorkDays4'>Worked Days: </label>
-  <input type='text' className='form-control' id='inputWorkDays4' onChange={this.handleChange.bind(this)} value={this.state.workedDays} name="workedDays" placeholder='Worked Days' />
+  <input type='number' className='form-control' id='inputWorkDays4' onChange={this.handleChange.bind(this)} value={this.state.absentDays > 30 || this.state.absentDays < 0 ? 0 : this.state.absentDays} name="workedDays" placeholder='Worked Days' />
 </div>
 }
 </div>
 
 <div className="form-row">
 <div className='form-group col-md-12'>
-  <label>Net Income: <b>{this.state.netIncome}</b></label>
+  <label>Net Income: <b>{Intl.NumberFormat("en-US",{  minimumFractionDigits: 2, maximumFractionDigits: 2   }).format(this.state.netIncome)}</b></label>
 </div>
 </div>
 
